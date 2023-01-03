@@ -51,6 +51,10 @@ const endpoints = {
     renewSource: (kitsuId: number, episodeNum: number) =>
       ipcRenderer.invoke("episode:renew-source", kitsuId, episodeNum),
     getHistory: (page: number) => ipcRenderer.invoke("episode:history", page),
+    download: (episodeURL: string, outputDir: string, outputFileName: string, resolution: string) =>
+      ipcRenderer.invoke("episode:download", episodeURL, outputDir, outputFileName, resolution),
+    getResolutions: (url: string) =>
+      ipcRenderer.invoke("episode:getResolutions", url),
   },
   system: {
     onGoto: (cb: (link: string) => void) => {

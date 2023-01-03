@@ -97,6 +97,7 @@
     "flowbite-svelte": "^0.28.4",
     "fluent-ffmpeg": "^2.1.2",
     "prisma": "^4.6.1",
+    "request": "^2.88.2",
     "string-similarity": "^4.0.4",
     "winston": "^3.8.2"
   }

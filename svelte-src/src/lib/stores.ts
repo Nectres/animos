@@ -23,3 +23,5 @@ export function createModal() {
 }
 
 export const showSettings = createModal();
+
+export const showDownloads = createModal();

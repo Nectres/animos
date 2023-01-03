@@ -6,6 +6,8 @@
   import { State, type EpisodeWithSkip } from "$lib/types";
   import type { Episode } from "@prisma/client";
   import EpisodeProgress from "$lib/components/EpisodeProgress.svelte";
+  import Downloader from "$lib/components/Downloader.svelte";
+  import { showDownloads } from "$lib/stores";
 
   let animeId: number;
   let episodeNum: number;
@@ -111,6 +113,13 @@
             {result.currentEp.title}
           </h3>
           <br />
+          <a
+            href="#downloads"
+            on:click={(_) => {
+              showDownloads.set(true);
+            }}>Download</a
+          >
+            <Downloader episode={result.currentEp} />
         </div>
       </div>
     {/if}
