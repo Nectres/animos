@@ -1,6 +1,7 @@
 <script lang="ts">
   import Hls from "hls.js";
   import Plyr from "plyr";
+  import axios from "axios";
   import type { Options as PlyrOptions } from "plyr";
   import { onDestroy, onMount } from "svelte";
   import type { EpisodeWithSkip } from "$lib/types";
@@ -25,15 +26,25 @@
 
   async function isSourceExpired(url: string): Promise<boolean> {
     console.log("Checking expiry for URL:", url);
-    return new Promise((res, rej) => {
-      const xhr = new XMLHttpRequest();
+    return new Promise(async (res, rej) => {
+      try {
+        if (url.includes(".m3u8")) {
+          let resp = await axios.get(url);
+          if (resp.data.startsWith("#")) res(false);
+          else res(true);
+        }
 
-      xhr.open("HEAD", url);
+        const xhr = new XMLHttpRequest();
 
-      xhr.onload = () => res(false);
-      xhr.onerror = () => res(true);
+        xhr.open("HEAD", url);
 
-      xhr.send();
+        xhr.onload = () => res(false);
+        xhr.onerror = () => res(true);
+
+        xhr.send();
+      } catch {
+        res(true);
+      }
     });
   }
 
@@ -42,7 +53,7 @@
     let linkExpired = await isSourceExpired(src);
     if (linkExpired) {
       console.log("Link expired, fetching new link . . .");
-      alert("Renewing video source, please wait for a few seconds . . .");
+      alert("Renewing video source, please wait for a few seconds . . ."); // alert() is blocking, replace this
       src = await window.api.episode.renewSource(
         episode.animeKitsuId,
         episode.number
